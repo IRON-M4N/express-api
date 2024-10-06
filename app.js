@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const axios = require('axios');
+const { pinterest, tiktok } = require('ironman-api');
 var app = express();
 var PORT = process.env.PORT || 3000;
 
@@ -54,13 +55,10 @@ app.get('/video', async (req, res) => {
     var ress = await axios.get("https://cdn.ironman.my.id/i/didqb4.mp4", {
       responseType: 'stream', // Important shit to set it as stream
     });
-    
     // Content type (explained in the route above)
     res.setHeader('Content-Type', 'video/mp4');
-
     // Pipe the video stream as response
     ress.data.pipe(res);
-    
     // stream errror (completely optional)
     ress.data.on('error', (err) => {
       console.error('Stream error:', err);
@@ -90,7 +88,40 @@ app.get('/end', (req, res) => {
   res.end(); // Ends the response without any content 
 });
 
-
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+////////////////////////////////
+//SOME DL WITH MY NPM MIGHT WORK OR NOT 
+// Pinterest dl
+app.get('/pinterest', async (req, res) => {
+  var { url } = req.query;
+  if (!url) return res.status(400).json({ error: 'need url' });
+  try {
+    var data = await pinterest(url);
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(404).json({ error: 'Fekd up' });
+  }
 });
+
+// TikTok dl 
+app.get('/tiktok', async (req, res) => {
+  var url = req.query.url;
+  if (!url) return res.status(404).json({ error: 'need url' });
+  try {
+    var data = await tiktok(url);
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'fekd up' });
+  }
+});
+
+//i guess that's all make a PR or anything if there is anything i left
+//there is also some method like 
+//app.get('/link/*
+//app.get('/link/:
+//you can check the docs for this stuffs
+
+
+//don't ask me to explain this, use ur brain 
+app.listen(PORT, () => console.log(`Api running on PORT:${PORT}`));

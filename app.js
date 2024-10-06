@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 var app = express();
 var PORT = process.env.PORT || 3000;
 
@@ -27,6 +28,14 @@ app.post('/data', (req, res) => {
   res.send(`Name: ${name}, Age: ${age}`); //to return what we got
 });
 
+//STREAM IMAGE/VIDEO/ANY
+app.get('/image', (req, res) => {
+  //headers to stream image inline witj filename
+  res.setHeader('Content-Type', 'image/jpeg'); //mimetype of file
+  res.setHeader('Content-Disposition', 'inline; filename="furina.jpg"');
+//to send via path 
+  res.sendFile(path.join(__dirname, 'img', 'furina.jpg'));
+});
 
 
 app.listen(PORT, () => {

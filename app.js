@@ -34,7 +34,7 @@ app.get('/image', (req, res) => {
   res.setHeader('Content-Type', 'image/jpeg'); //mimetype of file
   res.setHeader('Content-Disposition', 'inline; filename="furina.jpg"');
 //to send via path 
-  res.sendFile(path.join(__dirname, 'img', 'furina.jpg'));
+  res.sendFile(path.join(__dirname, 'img', '1125x2436.jpg'));
 });
 
 

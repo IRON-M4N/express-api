@@ -15,11 +15,18 @@ app.use(express.json());
 app.use('/site', express.static('static')); 
 //you can use "app.use(express.static('public'));" if you want the html to show in the root endpoint 
 
-//HOMEPAGE like root / of the base url the route for that
-app.get('/', (req, res) => {
+//For parsing encoded urls
+app.use(express.urlencoded({ extended: true })); 
+
+//to format json respose instead of minify way
+app.set('json spaces', 2);
+
+
+//HOMEPAGE
+//like root /home of the base url or the route for that
+app.get('/home', (req, res) => {
   res.send('Konnichiwa!'); //to send text
 //res.json({ msg: "Konnichiwa!" }); to send a json as response
-  
 });
 
 //POST REQ
@@ -63,6 +70,24 @@ app.get('/video', async (req, res) => {
     console.error('Request error:', error);
     res.status(500).send('Fekd up');
   }
+});
+
+//REDIRECT METHOD
+app.get('/redirect', (req, res) => {
+  //Redirect to the url
+  //well you can set status code in this since its not that important I'll be skipping that (read docs if ur curious)
+  res.redirect('https://ironman.my.id');
+});
+
+//SENDFILE
+app.get('/download', (req, res) => {
+  res.attachment('./img/1125x2436.jpg'); // to download it
+  res.send('File download');
+});
+
+//well it is what the name says
+app.get('/end', (req, res) => {
+  res.end(); // Ends the response without any content 
 });
 
 

@@ -1,1 +1,17 @@
-
+{
+  "name": "Api",
+  "version": "1.0.0",
+  "description": "example api",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "IRON-M4N",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "express": "^4.19.2",
+    "ironman-api": "^2.0.1"
+  }
+}

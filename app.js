@@ -1,9 +1,10 @@
 const express = require('express');
 const path = require('path');
+const axios = require('axios');
 var app = express();
 var PORT = process.env.PORT || 3000;
 
-//middlewares
+//MIDDLEWARES
 
 //for parsing incoming data body request without that express cant understand body request aka post requests
 app.use(express.json()); 
@@ -35,6 +36,33 @@ app.get('/image', (req, res) => {
   res.setHeader('Content-Disposition', 'inline; filename="furina.jpg"');
 //to send via path 
   res.sendFile(path.join(__dirname, 'img', '1125x2436.jpg'));
+});
+
+
+//PIPE METHOD
+app.get('/video', async (req, res) => {
+  try {
+    // This can be used for img, vid, aud, etc. etc.
+    // To make a GET request to the direct link with response type stream
+    var ress = await axios.get("https://cdn.ironman.my.id/i/didqb4.mp4", {
+      responseType: 'stream', // Important shit to set it as stream
+    });
+    
+    // Content type (explained in the route above)
+    res.setHeader('Content-Type', 'video/mp4');
+
+    // Pipe the video stream as response
+    ress.data.pipe(res);
+    
+    // stream errror (completely optional)
+    ress.data.on('error', (err) => {
+      console.error('Stream error:', err);
+      res.status(500).send('url fekd up');
+    });
+  } catch (error) {
+    console.error('Request error:', error);
+    res.status(500).send('Fekd up');
+  }
 });
 
 
